@@ -34,7 +34,7 @@
                 <el-button type="primary" plain @click="logout" class="sub">注销</el-button>
               </div>
               <div v-else>
-                <el-button type="primary" @click="tologin">登录</el-button>
+                <el-button type="primary" @click="loginShow = true">登录</el-button>
                 <el-button type="primary" plain @click="toregister">注册</el-button>
               </div>
             </div>
@@ -60,7 +60,7 @@
       </el-col>
     </el-row>
 
-    <login-dialog :login-show.sync="loginShow"></login-dialog>
+    <login-dialog :login-show.sync="loginShow" @say="loaduserinfo"></login-dialog>
     <logout-dialog :out-show.sync="outShow"></logout-dialog>
     <register-dialog :reg-show.sync="regShow"></register-dialog>
   </div>
@@ -77,21 +77,16 @@ export default {
     return {
       isLogin: false,
       keyword: "",
-      activeIndex: "1",
+      activeIndex: "1", //this.$route.path 默认激活为当前route path
       loginShow: false,
       outShow: false,
       regShow: false,
-      userInfo: {
-        img:
-          "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
-        username: "testuser"
-      }
+      userInfo: {}
     };
   },
   methods: {
     tologin() {
-      this.loginShow = true;
-      this.isLogin = !this.isLogin;
+      this.loginShow = true;      
     },
     logout() {
       this.outShow = true;
@@ -104,6 +99,15 @@ export default {
       console.log(key, keyPath);
       this.headerindex = key;
       this.$emit("on-callback", this.headerindex);
+    },
+    loaduserinfo(userinfo){
+      // userinfo: 登陆后子控件传过来的对象
+      // ↓ 存在session storage里的username&pswd
+      let username = sessionStorage.getItem("username");
+      let userid =sessionStorage.getItem("userid");
+      this.userInfo=userinfo
+      console.log("hello",this.userInfo)
+      this.isLogin = !this.isLogin;
     }
   },
   components: {
@@ -115,6 +119,10 @@ export default {
     // outShow() {
     //   this.logoutVisible = this.outShow;
     // }
+  },
+  computed:{
+  },
+  created: function(){
   }
 };
 </script>

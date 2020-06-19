@@ -1,22 +1,22 @@
 <template>
   <div>
     <el-dialog
-      title="收货地址"
+      title="登录"
       :visible.sync="loginVisible"
       @close="$emit('update:loginShow', false)"
-      :show="loginShow"
+      :show="loginShow" center
     >
       <el-form :model="form">          
         <el-form-item label="用户名" :label-width="formLabelWidth">
           <el-input placeholder="请输入用户名" v-model="form.name" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="密码" :label-width="formLabelWidth">
-          <el-input placeholder="请输入密码" v-model="form.pswd" show-password></el-input>
+          <el-input placeholder="请输入密码" v-model="form.passwd" show-password></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="loginVisible = false">取 消</el-button>
-        <el-button type="primary" @click="loginVisible = false">确 定</el-button>
+        <el-button type="primary" @click="loginAction">登 录</el-button>
+        <el-button @click="loginVisible = false">取 消</el-button>        
       </div>
     </el-dialog>
   </div>
@@ -30,7 +30,7 @@ export default {
       loginVisible: false,
       form: {
         name: "",
-        pswd: ""
+        passwd: ""
       },
       formLabelWidth: "120px"
     };
@@ -44,6 +44,31 @@ export default {
   watch: {
     loginShow() {
       this.loginVisible = this.loginShow;
+    }
+  },
+  methods:{
+    loginAction(){
+      console.log(this.form)
+      this.$http.post("http://localhost:8001/admin/login",this.form).then(res=>{
+        // res code: res.status
+        // res data: res.data{code:200, msg:"login succeed", data:null}
+        if(res.data.code==200){
+          this.$message({
+            message: "登录成功",
+            type:'success'
+          })
+          const userinfo = res.data.data;
+          window.sessionStorage.setItem("userid",userinfo.id)
+          window.sessionStorage.setItem("username",userinfo.username)
+          this.$emit('say',res.data.data)
+        }else{
+          this.$message({
+            message: res.data.msg,
+            type:'error'
+          })
+        }
+      })
+      this.loginVisible = false;
     }
   }
 };

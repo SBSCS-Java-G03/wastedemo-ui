@@ -17,6 +17,8 @@ const DataAnalysis = () =>
 
 const UserIndex = () =>
     import ('@/pages/usercenter/userindex')
+const AdminList = () =>
+    import ('@/pages/backend/adminlist')
 
 
 Vue.use(Router)
@@ -58,6 +60,11 @@ export default new Router({
             path: '/user',
             name: 'UserCenter',
             component: UserIndex
+        },
+        {
+            path: '/admin/all',
+            name: 'AdminList',
+            component: AdminList
         },
         {
             path: '/helloworld',

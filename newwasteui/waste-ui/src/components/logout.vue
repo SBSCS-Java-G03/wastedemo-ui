@@ -10,7 +10,7 @@
       <span>确认要注销吗？</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="logoutVisible = false">取 消</el-button>
-        <el-button type="primary" @click="logoutVisible = false">确 定</el-button>
+        <el-button type="primary" @click="logoutaction">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -34,6 +34,15 @@ export default {
     outShow() {
       this.logoutVisible = this.outShow;
     }
+  },
+  methods:{
+    logoutaction(){
+      this.logoutVisible=false;
+      window.sessionStorage.removeItem("userid")
+      window.sessionStorage.removeItem("username")     
+      console.log("removed")
+    }
+
   }
 };
 </script>
