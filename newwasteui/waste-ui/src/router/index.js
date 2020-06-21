@@ -14,6 +14,8 @@ const Order = () =>
     import ('@/pages/order')
 const DataAnalysis = () =>
     import ('@/pages/data')
+const UserPoint = () =>
+    import ('@/components/userpoint')
 
 const UserIndex = () =>
     import ('@/pages/usercenter')
@@ -60,6 +62,11 @@ export default new Router({
             path: '/user',
             name: 'UserCenter',
             component: UserIndex
+        },
+        {
+            path: '/user/point',
+            name: 'UserPoint',
+            component: UserPoint
         },
         {
             path: '/admin/all',

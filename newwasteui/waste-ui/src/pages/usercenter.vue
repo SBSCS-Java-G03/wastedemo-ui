@@ -6,7 +6,10 @@
         <div id="otherinfo">
           <h2>{{userinfo.name}} 的个人中心</h2>
           <h4>积分数：{{userinfo.point}}分</h4>
-          <el-button type="primary" plain round size="mini">积分详情</el-button>
+          <el-button type="primary" plain round size="mini">
+            <!-- <el-link href="https://www.baidu.com" target="_blank">积分详情</el-link> -->
+            <router-link to="/user/point">积分详情</router-link>
+            </el-button>
           <el-button type="danger" plain round size="mini" @click="pwdShow=true">修改密码</el-button>
         </div>
       </div>
