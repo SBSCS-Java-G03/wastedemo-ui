@@ -48,10 +48,11 @@ export default {
   },
   methods:{
     loginAction(){
-      console.log(this.form)
-      this.$http.post("http://localhost:8001/admin/login",this.form).then(res=>{
+      // console.log(this.form)
+      this.$http.post("http://localhost:8001/user/login",this.form).then(res=>{
         // res code: res.status
-        // res data: res.data{code:200, msg:"login succeed", data:null}
+        // res data: res.data{code:200, msg:null, data:{id, name, password, realname, tel, role, point, delFlag} }
+        window.sessionStorage.setItem("isLogin",false)
         if(res.data.code==200){
           this.$message({
             message: "登录成功",
@@ -59,8 +60,13 @@ export default {
           })
           const userinfo = res.data.data;
           window.sessionStorage.setItem("userid",userinfo.id)
-          window.sessionStorage.setItem("username",userinfo.username)
+          window.sessionStorage.setItem("username",userinfo.name)
+          window.sessionStorage.setItem("isLogin",true)
           this.$emit('say',res.data.data)
+
+          this.$cookies.set("currentuser", res.data.data) 
+          // console.log("hey i got a cookie:",this.$cookies.get("currentuser").id)
+
         }else{
           this.$message({
             message: res.data.msg,

@@ -11,22 +11,15 @@
             <h1>附近回收点</h1>
             <p>查找本区的回收站点 - 暂时查找所有</p>
             <el-table
-              :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+              :data="sitelist.filter(data => !search || data.sitename.toLowerCase().includes(search.toLowerCase()) || (data.area.includes(search)))"
               style="width: 100%"
             >
-              <el-table-column label="Date" prop="date"></el-table-column>
-              <el-table-column label="Name" prop="name"></el-table-column>
-              <el-table-column align="right">
+              <el-table-column label="所在区域" prop="area" width="150" sortable></el-table-column>
+              <el-table-column label="站点名" prop="sitename" width="200"></el-table-column>
+              <el-table-column label="详细地址" prop="address" min-width="20%"></el-table-column>
+              <el-table-column align="right" width="300">
                 <template slot="header" slot-scope="scope">
                   <el-input v-model="search" size="mini" placeholder="输入关键字搜索" />
-                </template>
-                <template slot-scope="scope">
-                  <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
-                  <el-button
-                    size="mini"
-                    type="danger"
-                    @click="handleDelete(scope.$index, scope.row)"
-                  >Delete</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -111,6 +104,7 @@ export default {
           }
         ]
       },
+      sitelist: [],
       options: [
         {
           label: "热门城市",
@@ -147,32 +141,26 @@ export default {
           ]
         }
       ],
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄"
-        }
-      ],
       search: ""
     };
   },
   methods: {
+    async loadsitelist() {
+      const { data: res } = await this.$http.post(
+        "http://localhost:8001/recycle/site/findall"
+      );
+      if (res.code == 200) {
+        // let siteobj = res.data;
+        // let sitearr = [];
+        // for (let i in siteobj) {
+        //   sitearr.push(siteobj[i]);
+        // }
+        let sitearr = Array.from(res.data);
+        this.sitelist = sitearr;
+        if (this.sitelist instanceof Array) console.log("sitelist is Array");
+      }
+    },
+    loadarealist() {},
     ordermsg() {
       this.$notify({
         title: "order字段",
@@ -224,7 +212,11 @@ export default {
     handleDelete(index, row) {
       console.log(index, row);
     }
-  }
+  },
+  created() {
+    this.loadsitelist();
+  },
+  watch: {}
 };
 </script>
 

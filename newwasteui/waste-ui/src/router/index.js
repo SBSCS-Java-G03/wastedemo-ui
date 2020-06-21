@@ -16,7 +16,7 @@ const DataAnalysis = () =>
     import ('@/pages/data')
 
 const UserIndex = () =>
-    import ('@/pages/usercenter/userindex')
+    import ('@/pages/usercenter')
 const AdminList = () =>
     import ('@/pages/backend/adminlist')
 
@@ -78,3 +78,8 @@ export default new Router({
         }
     ]
 })
+
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+    return originalPush.call(this, location).catch(err => err)
+}

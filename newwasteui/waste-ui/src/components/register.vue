@@ -184,7 +184,7 @@ export default {
           }
         } else {
           this.$message({
-            message: res.data.msg,
+            message: "注册失败",
             type: "error"
           });
           return false;

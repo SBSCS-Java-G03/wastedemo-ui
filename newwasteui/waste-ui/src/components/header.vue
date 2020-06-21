@@ -27,10 +27,10 @@
                   fit="scale-down"
                   shape="circle"
                   class="sub"
-                  :src="userInfo.img"
+                  :src="squareUrl"
                   :alt="userInfo.username"
                 ></el-avatar>
-                <span class="sub">欢迎您，{{userInfo.username}}</span>
+                <span class="sub">欢迎您，{{userInfo.name}}</span>
                 <el-button type="primary" plain @click="logout" class="sub">注销</el-button>
               </div>
               <div v-else>
@@ -74,19 +74,37 @@ import LogoutDialog from "@/components/logout";
 export default {
   name: "myHeader",
   data() {
+    let routerdict = {
+      "/": 1,
+      "/noticeboard": 2,
+      "/knowledge": 3,
+      "/order": 4,
+      "/data": 5,
+      "/user": 6
+    };
     return {
+      squareUrl:
+        "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
       isLogin: false,
       keyword: "",
       activeIndex: "1", //this.$route.path 默认激活为当前route path
       loginShow: false,
       outShow: false,
       regShow: false,
-      userInfo: {}
+      userInfo: {},
+      routerurl: {
+        "/": "1",
+        "/noticeboard": "2",
+        "/knowledge": "3",
+        "/order": "4",
+        "/data": "5",
+        "/user": "6"
+      }
     };
   },
   methods: {
     tologin() {
-      this.loginShow = true;      
+      this.loginShow = true;
     },
     logout() {
       this.outShow = true;
@@ -97,16 +115,13 @@ export default {
     },
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
-      this.headerindex = key;
-      this.$emit("on-callback", this.headerindex);
+      this.activeIndex = key;
+      this.$emit("on-callback", key);
     },
-    loaduserinfo(userinfo){
+    loaduserinfo(userinfo) {
       // userinfo: 登陆后子控件传过来的对象
-      // ↓ 存在session storage里的username&pswd
-      let username = sessionStorage.getItem("username");
-      let userid =sessionStorage.getItem("userid");
-      this.userInfo=userinfo
-      console.log("hello",this.userInfo)
+      this.userInfo = userinfo;
+      console.log("after login", this.userInfo);
       this.isLogin = !this.isLogin;
     }
   },
@@ -120,14 +135,22 @@ export default {
     //   this.logoutVisible = this.outShow;
     // }
   },
-  computed:{
-  },
-  created: function(){
+  computed: {},
+  created: function() {
+    // ↓ 存在session storage里的 login状态
+    let loginFlag = sessionStorage.getItem("isLogin");
+    console.log("is Login?", loginFlag);
+    this.isLogin = loginFlag;
+    this.userInfo.name = this.$cookies.get("currentuser").name;
+
+    console.log(this.$route.path);
+    // let path=this.$route.path
+    let path = window.location.pathname.slice(6);
+    this.activeIndex = this.routerurl[path];
   }
 };
 </script>
-
-<style>
+<style scoped>
 /* mystyle */
 .headerdiv {
   margin-top: 20px;

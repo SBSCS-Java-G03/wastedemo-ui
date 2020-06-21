@@ -39,7 +39,8 @@ export default {
     logoutaction(){
       this.logoutVisible=false;
       window.sessionStorage.removeItem("userid")
-      window.sessionStorage.removeItem("username")     
+      window.sessionStorage.removeItem("username") 
+      this.$cookies.remove("currentuser")    
       console.log("removed")
     }
 

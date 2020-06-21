@@ -8,11 +8,13 @@ import 'element-ui/lib/theme-chalk/index.css';
 import Moment from 'moment';
 import axios from 'axios'
 import VueAxios from 'vue-axios';
+import VueCookies from 'vue-cookies'
 
 Vue.use(ElementUI);
 // Vue.use(VueAxios, axios)
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
+Vue.use(VueCookies)
 
 Vue.filter('comverTime', function(data, format) {
     return Moment(data).format(format);
