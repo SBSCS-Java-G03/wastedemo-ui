@@ -32,15 +32,25 @@ export default {
       if (res.code == 200) {
         let array = Array.from(res.data);
         array.forEach(element => {
-            let date = new Date(element.createtime);
-            let year = date.getFullYear(); //年
-            let month = date.getMonth(); //月
-            let day = date.getDate(); //日
-            let hours = date.getHours(); //时
-            let min = date.getMinutes(); //分
-            let second = date.getSeconds(); //秒
-            let datestr =(year + "年" + month + "月" + day + "日 " + hours + "时" + min+"分");
-            element.createtime = datestr;
+          let date = new Date(element.createtime);
+          let year = date.getFullYear(); //年
+          let month = date.getMonth() + 1; //月
+          let day = date.getDate(); //日
+          let hours = date.getHours(); //时
+          let min = date.getMinutes(); //分
+          let second = date.getSeconds(); //秒
+          let datestr =
+            year +
+            "年" +
+            month +
+            "月" +
+            day +
+            "日 " +
+            hours +
+            "时" +
+            min +
+            "分";
+          element.createtime = datestr;
         });
         this.detailtable = array;
       }

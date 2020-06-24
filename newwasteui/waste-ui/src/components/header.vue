@@ -33,7 +33,7 @@
                 <span class="sub">欢迎您，{{userInfo.name}}</span>
                 <el-button type="primary" plain @click="logout" class="sub">注销</el-button>
               </div>
-              <div v-else>
+              <div v-else class="userinfo">
                 <el-button type="primary" @click="loginShow = true">登录</el-button>
                 <el-button type="primary" plain @click="toregister">注册</el-button>
               </div>
@@ -61,7 +61,7 @@
     </el-row>
 
     <login-dialog :login-show.sync="loginShow" @say="loaduserinfo"></login-dialog>
-    <logout-dialog :out-show.sync="outShow"></logout-dialog>
+    <logout-dialog :out-show.sync="outShow" @say="checklogout"></logout-dialog>
     <register-dialog :reg-show.sync="regShow"></register-dialog>
   </div>
 </template>
@@ -108,7 +108,7 @@ export default {
     },
     logout() {
       this.outShow = true;
-      this.isLogin = !this.isLogin;
+      // this.isLogin = !this.isLogin;
     },
     toregister() {
       this.regShow = true;
@@ -123,6 +123,12 @@ export default {
       this.userInfo = userinfo;
       console.log("after login", this.userInfo);
       this.isLogin = !this.isLogin;
+    },
+    checklogout(msg){
+      console.log("is Logout?",msg)
+      if(msg){
+        this.isLogin=false
+      }
     }
   },
   components: {
@@ -141,7 +147,17 @@ export default {
     let loginFlag = sessionStorage.getItem("isLogin");
     console.log("is Login?", loginFlag);
     this.isLogin = loginFlag;
-    this.userInfo.name = this.$cookies.get("currentuser").name;
+    const cuser = this.$cookies.get("currentuser");
+    if (cuser == null) {
+      this.isLogin = false;
+      this.$message({
+        message: "您尚未登录，请登陆。",
+        type: "error"
+      });
+    } else {
+      this.isLogin = true;
+      this.userInfo.name = cuser.name;
+    }
 
     console.log(this.$route.path);
     // let path=this.$route.path

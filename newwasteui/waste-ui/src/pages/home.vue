@@ -18,7 +18,7 @@
       <!-- 垃圾分类知识 -->
       <el-main>
         <h1>垃圾分类知识</h1>
-        <div id="know">
+        <div id="know" >
           <el-card class="know-card" shadow="hover" v-for="item in knows" :key="item.key">
             <div slot="header" class="clearfix">
               <span>{{item.title}}</span>
@@ -171,6 +171,7 @@ body > .el-container {
   margin: 20px;
   height: fit-content;
   min-height: 250px;
+  width: 100%;
 }
 
 #know img {

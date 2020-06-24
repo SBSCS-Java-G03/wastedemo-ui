@@ -130,6 +130,12 @@
 export default {
   data() {
     const cuser = this.$cookies.get("currentuser");
+    if (cuser == null) {
+      this.$message({
+        message: "您尚未登录，请登陆后重试",
+        type: "error"
+      });
+    }
     return {
       addcount: 0,
       currentuser: cuser,
@@ -226,7 +232,7 @@ export default {
             element.order.siteid = findname;
             let date = new Date(element.order.createtime);
             let year = date.getFullYear(); //年
-            let month = date.getMonth(); //月
+            let month = date.getMonth()+1; //月
             let day = date.getDate(); //日
             let hours = date.getHours(); //时
             let min = date.getMinutes(); //分

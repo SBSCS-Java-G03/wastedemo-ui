@@ -58,7 +58,9 @@ export default {
     return {
       squareUrl:
         "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
-      userinfo: {},
+      userinfo: {
+        name:"null"
+      },
       pwdShow: false
     };
   },
@@ -100,9 +102,16 @@ export default {
       this.$refs[formName].resetFields();
     },
     loaduserdata() {
-      // this.userinfo = this.$cookies.get("currentuser");
+      this.userinfo = this.$cookies.get("currentuser");
       // console.log("hey i got a cookie:", this.userinfo);
-      let id = this.$cookies.get("currentuser").id;
+      if (this.userinfo == null) {
+      this.$message({
+        message: "您尚未登录，请登陆后重试",
+        type: "error"
+      });
+      return false;
+    }
+      let id = this.userinfo.id;
       this.$http
         .post("http://localhost:8001/user/loaduserinfo", { id: id })
         .then(res => {
